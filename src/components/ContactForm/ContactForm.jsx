@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Form, FormTitle, Input, FormBtn } from './ContactForm.styled';
 
 export class ContactForm extends Component {
@@ -18,7 +19,7 @@ export class ContactForm extends Component {
 
     e.preventDefault();
 
-    if (this.props.contacts.find(contact => contact.name.includes(name))) {
+    if (this.props.contacts.find(contact => contact.name.toLowerCase().includes(name.toLowerCase()))) {
       alert(`${name} is already is contact`);
     } else {
       this.props.onSubmit(name, number);
@@ -63,3 +64,13 @@ export class ContactForm extends Component {
 
 }
 
+ContactForm.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.exact({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+    }),
+  ),
+  onSubmit: PropTypes.func.isRequired,
+}

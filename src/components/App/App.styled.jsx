@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
 
-export const Container = styled.div`
+export const ContainerApp = styled.div`
   margin-left: 10px;
 `

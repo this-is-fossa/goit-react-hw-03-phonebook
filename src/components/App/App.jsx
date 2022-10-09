@@ -4,7 +4,7 @@ import { Section } from '../Section/Section';
 import { ContactForm } from '../ContactForm/ContactForm';
 import { ContactList } from '../ContactList/ContactList';
 import { FilterContacts } from '../FilterContacts/FilterContacts';
-import { Container } from './App.styled';
+import { ContainerApp } from './App.styled';
 
 
 export class App extends Component {
@@ -51,18 +51,17 @@ export class App extends Component {
 
   render() {
     const { filter, contacts } = this.state;
-    const visibleContacts = this.getVisibleContacts();
 
     return (
-      <Container>
+      <ContainerApp>
         <Section title='Phonebook'>
           <ContactForm contacts={contacts} onSubmit={this.addContact} />
         </Section>
         <Section title='Contacts'>
           <FilterContacts value={filter} onChange={this.changeFiltered} />
-          <ContactList contacts={visibleContacts} onDeleteContact={this.deleteContact} />
+          <ContactList contacts={this.getVisibleContacts()} onDeleteContact={this.deleteContact} />
         </Section>
-      </Container>
+      </ContainerApp>
     );
   }
 }
