@@ -1,23 +1,34 @@
-import React, { Component } from 'react';
-import { nanoid } from 'nanoid';
-import { Section } from '../Section/Section';
-import { ContactForm } from '../ContactForm/ContactForm';
-import { ContactList } from '../ContactList/ContactList';
-import { FilterContacts } from '../FilterContacts/FilterContacts';
-import { ContainerApp } from './App.styled';
+import React, {Component} from 'react';
+import {nanoid} from 'nanoid';
+import {Section} from '../Section/Section';
+import {ContactForm} from '../ContactForm/ContactForm';
+import {ContactList} from '../ContactList/ContactList';
+import {FilterContacts} from '../FilterContacts/FilterContacts';
+import {ContainerApp} from './App.styled';
 
 
 export class App extends Component {
 
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [],
     filter: '',
   };
+
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+
+    if (parsedContacts) {
+      this.setState({contacts: parsedContacts});
+
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   addContact = (name, number) => {
     const contact = {
@@ -38,11 +49,11 @@ export class App extends Component {
   };
 
   changeFiltered = (e) => {
-    this.setState({ filter: e.currentTarget.value });
+    this.setState({filter: e.currentTarget.value});
   };
 
   getVisibleContacts = () => {
-    const { contacts, filter } = this.state;
+    const {contacts, filter} = this.state;
     const normalizedFilter = filter.toLowerCase();
 
     return contacts.filter(contact =>
@@ -50,16 +61,16 @@ export class App extends Component {
   };
 
   render() {
-    const { filter, contacts } = this.state;
+    const {filter, contacts} = this.state;
 
     return (
       <ContainerApp>
         <Section title='Phonebook'>
-          <ContactForm contacts={contacts} onSubmit={this.addContact} />
+          <ContactForm contacts={contacts} onSubmit={this.addContact}/>
         </Section>
         <Section title='Contacts'>
-          <FilterContacts value={filter} onChange={this.changeFiltered} />
-          <ContactList contacts={this.getVisibleContacts()} onDeleteContact={this.deleteContact} />
+          <FilterContacts value={filter} onChange={this.changeFiltered}/>
+          <ContactList contacts={this.getVisibleContacts()} onDeleteContact={this.deleteContact}/>
         </Section>
       </ContainerApp>
     );
